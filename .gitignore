@@ -1,0 +1,17 @@
+# Pruebas locales
+/tests/
+
+# Credenciales de conexión
+/app/config/conexion.php
+.env
+.env.*
+
+# Dependencias
+/vendor/
+/node_modules/
+
+# Archivos temporales
+*.log
+
+# Respaldos SQL temporales
+*.sql
