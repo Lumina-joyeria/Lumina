@@ -10,17 +10,20 @@ function iniciarSesion(PDO $conexion, string $correo, string $contrasena) {
         return false;
     }
     
-    session_start();
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
     session_regenerate_id(true);
-    $_SESSION["id_usuario"] = $usuario["id"];
-    $_SESSION["rol_usuario"] = $usuario["id_rol"];
+    $_SESSION["id_usuario"] = (int) $usuario["id"];
+    $_SESSION["rol_usuario"] = (int) $usuario["id_rol"];
     return true;
 }
 
 function cerrarSesion() {
     
-    session_start();
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
     $_SESSION = [];
     session_destroy();
-    
 }
