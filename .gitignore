@@ -1,8 +1,7 @@
-# Pruebas locales
-/tests/
+# Codigo PHP anterior (temporal)
+/legacy-php/
 
-# Credenciales de conexión
-/app/config/conexion.php
+# Configuracion privada
 .env
 .env.*
 
@@ -12,6 +11,4 @@
 
 # Archivos temporales
 *.log
-
-# Respaldos SQL temporales
 *.sql
