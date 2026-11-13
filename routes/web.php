@@ -3,11 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ProductoController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Rutas CRUD Categoria
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 
@@ -46,3 +48,28 @@ Route::patch('/categorias/{categoria}', [CategoriaController::class, 'update'])
 Route::delete('/categorias/{categoria}', [CategoriaController::class, 'destroy'])
     ->middleware(['auth', 'solo.admin'])
     ->name('categorias.destroy');
+
+// Rutas CRUD Producto
+Route::get('/productos', [ProductoController::class, 'index'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('productos.index');
+
+Route::get('/productos/crear', [ProductoController::class, 'create'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('productos.create');
+
+Route::post('/productos', [ProductoController::class, 'store'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('productos.store');
+
+Route::get('/productos/{producto}/editar', [ProductoController::class, 'edit'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('productos.edit');
+
+Route::patch('/productos/{producto}', [ProductoController::class, 'update'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('productos.update');
+
+Route::delete('/productos/{producto}', [ProductoController::class, 'destroy'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('productos.destroy');
