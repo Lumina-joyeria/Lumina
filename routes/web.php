@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\ClienteController;
+use GuzzleHttp\Client;
 
 Route::get('/', function () {
     return view('welcome');
@@ -73,3 +75,27 @@ Route::patch('/productos/{producto}', [ProductoController::class, 'update'])
 Route::delete('/productos/{producto}', [ProductoController::class, 'destroy'])
     ->middleware(['auth', 'solo.admin'])
     ->name('productos.destroy');
+
+Route::get('/clientes', [ClienteController::class, 'index'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('clientes.index');
+
+Route::get('/clientes/crear', [ClienteController::class, 'create'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('clientes.create');
+
+Route::post('/clientes', [ClienteController::class, 'store'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('clientes.store');
+
+Route::get('/clientes/{cliente}/editar', [ClienteController::class, 'edit'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('clientes.edit');
+
+Route::patch('/clientes/{cliente}', [ClienteController::class, 'update'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('clientes.update');
+
+Route::delete('/clientes/{cliente}', [ClienteController::class, 'destroy'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('clientes.destroy');
