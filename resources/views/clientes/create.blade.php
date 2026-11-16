@@ -1,44 +1,8 @@
-<h1>Registrar clientes</h1>
-
-@if ($errors->any())
-    <ul>
-        @foreach ($errors->all() as $error)
-            <li style="color: #D00;">{{ $error }}</li>
-        @endforeach
-    </ul>
-@endif
-
-<form action="{{ route('clientes.store') }}" method="POST">
-    @csrf
-
-    <label for="nombre">Nombre:</label>
-    <input
-        type="text"
-        id="nombre"
-        name="nombre"
-        value="{{ old('nombre') }}"
-        required
-        maxlength="100"
-    >
-
-    <label for="correo">Correo:</label>
-    <input
-        type="email"
-        id="correo"
-        name="correo"
-        value="{{ old('correo') }}"
-        required
-        maxlength="100"
-    >
-
-    <label for="telefono">Telefono:</label>
-    <input
-        type="tel"
-        id="telefono"
-        name="telefono"
-        value="{{ old('telefono') }}"
-        maxlength="20"
-    >
-
-    <button type="submit">Registrar cliente</button>
-</form>
+@extends('layouts.workspace')
+@section('title', 'Nuevo cliente')
+@section('eyebrow', 'Relaciones / Clientes')
+@section('page_title', 'Nuevo cliente')
+@section('content')
+<a class="back-link" href="{{ route('clientes.index') }}"><x-icon name="arrow-left" size="18" />Volver a clientes</a>
+<div class="editor-grid"><form class="editor-card" method="POST" action="{{ route('clientes.store') }}">@csrf<div class="editor-card__head"><span><x-icon name="users" /></span><div><h2>Información del cliente</h2><p>Los campos marcados con * son obligatorios.</p></div></div>@include('clientes._form')<div class="form-actions"><a class="button button--ghost" href="{{ route('clientes.index') }}">Cancelar</a><button class="button button--primary" type="submit"><x-icon name="check" size="18" />Guardar cliente</button></div></form><aside class="help-card"><span><x-icon name="info" /></span><h2>Datos de contacto</h2><p>El correo debe ser único. El teléfono es opcional y puede tener hasta 20 caracteres.</p></aside></div>
+@endsection

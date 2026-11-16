@@ -1,0 +1,4 @@
+<div class="form-grid form-grid--single">
+    <div class="field"><label for="nombre">Nombre de la categoría <span>*</span></label><input class="input" type="text" id="nombre" name="nombre" value="{{ old('nombre', $categoria->nombre ?? '') }}" maxlength="50" placeholder="Ej. Collares" required>@error('nombre')<p class="field__error">{{ $message }}</p>@enderror<p class="field__hint">Máximo 50 caracteres.</p></div>
+    <div class="field"><label for="descripcion">Descripción</label><textarea class="input input--textarea" id="descripcion" name="descripcion" maxlength="255" rows="5" placeholder="Describe brevemente esta categoría...">{{ old('descripcion', $categoria->descripcion ?? '') }}</textarea>@error('descripcion')<p class="field__error">{{ $message }}</p>@enderror<p class="field__hint">Opcional · Máximo 255 caracteres.</p></div>
+</div>

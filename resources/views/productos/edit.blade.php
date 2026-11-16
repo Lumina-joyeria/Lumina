@@ -1,78 +1,8 @@
-<h1>Editar producto</h1>
-
-<form action="{{ route('productos.update', $producto->id) }}" method="POST">
-    @csrf
-    @method('PATCH')
-    
-    <label for="nombre">Nombre:</label>
-    <input
-        type="text"
-        name="nombre"
-        id="nombre"
-        value="{{ old('nombre', $producto->nombre) }}"
-        maxlength="100"
-        required
-    >
-    @error('nombre')
-        <p>{{ $message }}</p>
-    @enderror
-    
-    <label for="description">Descripción:</label>
-    <textarea
-        name="description"
-        id="description"
-    >{{ old('description', $producto->description) }}</textarea>
-    @error('description')
-        <p>{{$message}}</p>
-    @enderror
-    
-    <label for="precio">Precio</label>
-    <input
-        type="number"
-        name="precio"
-        id="precio"
-        min="0"
-        step="0.01"
-        value="{{ old('precio', $producto->precio) }}"
-        required
-    >
-    @error('precio')
-        <p>{{ $message }}</p>
-    @enderror
-    
-    <label for="stock">Stock</label>
-    <input
-        type="number"
-        name="stock" 
-        id="stock"
-        min="0"
-        step="1"
-        value="{{ old('stock', $producto->stock) }}"
-        required
-    >
-    @error('stock')
-        <p>{{ $message }}</p>
-    @enderror
-    
-    <label for="id_categoria">Categoría</label>
-    <select
-        name="id_categoria"
-        id="id_categoria"
-        required
-    >
-        <option value="">Seleccione una categoría</option>
-        @foreach ($categorias as $categoria)
-            <option value="{{ $categoria->id }}"
-                @selected(old('id_categoria', $producto->id_categoria) == $categoria->id)>
-                {{ $categoria->nombre }}
-            </option>
-        @endforeach
-    </select>
-    @error('id_categoria')
-        <p>{{ $message }}</p>
-    @enderror
-    
-    <button type="submit">Actualizar producto</button>
-</form>
-
-<a href="{{ route('productos.index') }}">Volver al listado</a>
+@extends('layouts.workspace')
+@section('title', 'Editar producto')
+@section('eyebrow', 'Catálogo / Productos')
+@section('page_title', 'Editar producto')
+@section('content')
+<a class="back-link" href="{{ route('productos.index') }}"><x-icon name="arrow-left" size="18" />Volver a productos</a>
+<div class="editor-grid"><form class="editor-card" action="{{ route('productos.update', $producto) }}" method="POST">@csrf @method('PATCH')<div class="editor-card__head"><span><x-icon name="edit" /></span><div><h2>{{ $producto->nombre }}</h2><p>Actualiza la información de esta pieza.</p></div></div>@include('productos._form', ['producto' => $producto])<div class="form-actions"><a class="button button--ghost" href="{{ route('productos.index') }}">Cancelar</a><button class="button button--primary" type="submit"><x-icon name="check" size="18" />Guardar cambios</button></div></form><aside class="help-card"><span><x-icon name="info" /></span><h2>Conexión existente</h2><p>Este formulario conserva los campos y reglas actuales del backend: nombre, description, precio, stock e id_categoria.</p></aside></div>
+@endsection
