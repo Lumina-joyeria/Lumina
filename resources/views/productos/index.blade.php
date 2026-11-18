@@ -4,11 +4,25 @@
     <p>{{ session('success') }}</p>
 @endif
 
+@if (session('error'))
+    <p style="color: #D00;">{{ session('error') }}</p>
+@endif
+
 <a href="{{ route('productos.create') }}">Registrar producto</a>
 
 @forelse ($productos as $producto)
     <div>
         <h3>{{ $producto->nombre }}</h3>
+        
+        @if ($producto->imagen)
+            <img
+                src="{{ asset('storage/' . $producto->imagen) }}"
+                alt="{{ $producto->nombre }}"
+                width="180"
+            >
+        @else
+            <p>Producto sin fotografía.</p>
+        @endif
         
         <p>Categoría: {{ $producto->categoria->nombre }}</p>
         <p>Precio: ${{ number_format($producto->precio, 2)}}</p>

@@ -1,6 +1,6 @@
 <h1>Registrar producto</h1>
 
-<form action="{{ route('productos.store') }}" method="POST">
+<form action="{{ route('productos.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     
     <label for="nombre">Nombre:</label>
@@ -39,17 +39,17 @@
         <p>{{ $message }}</p>
     @enderror
     
-    <label for="stock">Stock</label>
+    <label for="imagen">Imagen del producto</label>
+    
     <input
-        type="number"
-        name="stock" 
-        id="stock"
-        min="0"
-        step="1"
-        value="{{ old('stock', 0) }}"
+        type="file"
+        name="imagen"
+        id="imagen"
+        accept=".jpg,.jpeg,.jfif,.png,.webp"
         required
     >
-    @error('stock')
+    
+    @error('imagen')
         <p>{{ $message }}</p>
     @enderror
     

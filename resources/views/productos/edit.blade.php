@@ -1,6 +1,6 @@
 <h1>Editar producto</h1>
 
-<form action="{{ route('productos.update', $producto->id) }}" method="POST">
+<form action="{{ route('productos.update', $producto->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PATCH')
     
@@ -40,20 +40,6 @@
         <p>{{ $message }}</p>
     @enderror
     
-    <label for="stock">Stock</label>
-    <input
-        type="number"
-        name="stock" 
-        id="stock"
-        min="0"
-        step="1"
-        value="{{ old('stock', $producto->stock) }}"
-        required
-    >
-    @error('stock')
-        <p>{{ $message }}</p>
-    @enderror
-    
     <label for="id_categoria">Categoría</label>
     <select
         name="id_categoria"
@@ -69,6 +55,28 @@
         @endforeach
     </select>
     @error('id_categoria')
+        <p>{{ $message }}</p>
+    @enderror
+    
+    <label for="imagen">Cambiar fotografía:</label>
+    
+    @if ($producto->imagen)
+        <p>Fotografía actual:</p>
+        <img
+            src="{{ asset('storage/' . $producto->imagen) }}"
+            alt="{{ $producto->nombre }}"
+            width="180"
+        >
+    @endif
+    
+    <input
+        type="file"
+        name="imagen"
+        id="imagen"
+        accept=".jpg,.jpeg,.jfif,.png,.webp"
+    >
+    
+    @error('imagen')
         <p>{{ $message }}</p>
     @enderror
     
