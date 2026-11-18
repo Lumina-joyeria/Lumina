@@ -4,6 +4,7 @@
 # Configuracion privada
 .env
 .env.*
+!.env.example
 
 # Dependencias
 /vendor/
@@ -12,3 +13,11 @@
 # Archivos temporales
 *.log
 *.sql
+
+!database/lumina_estructura.sql
+
+/storage/logs/*.log
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/public/storage

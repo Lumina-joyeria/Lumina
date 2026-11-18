@@ -5,7 +5,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ClienteController;
-use GuzzleHttp\Client;
+use App\Http\Controllers\PedidoController;
+use App\Models\Pedido;
+use App\Http\Controllers\MovimientoFinancieroController;
+use App\Http\Controllers\CompraInventarioController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -99,3 +102,43 @@ Route::patch('/clientes/{cliente}', [ClienteController::class, 'update'])
 Route::delete('/clientes/{cliente}', [ClienteController::class, 'destroy'])
     ->middleware(['auth', 'solo.admin'])
     ->name('clientes.destroy');
+
+Route::get('/pedidos/crear', [PedidoController::class, 'create'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('pedidos.create');
+
+Route::post('/pedidos', [PedidoController::class, 'store'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('pedidos.store');
+
+Route::get('/pedidos', [PedidoController::class, 'index'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('pedidos.index');
+
+Route::patch('/pedidos/{id}/confirmar', [PedidoController::class, 'confirmar'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('pedidos.confirmar');
+
+Route::patch('/pedidos/{id}/entregar', [PedidoController::class, 'entregar'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('pedidos.entregar');
+
+Route::patch('/pedidos/{id}/cancelar', [PedidoController::class, 'cancelar'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('pedidos.cancelar');
+
+Route::get('/finanzas', [MovimientoFinancieroController::class, 'index'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('finanzas.index');
+
+Route::post('/finanzas', [MovimientoFinancieroController::class, 'store'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('finanzas.store');
+
+Route::get('/compras/crear', [CompraInventarioController::class, 'create'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('compras.create');
+
+Route::post('/compras', [CompraInventarioController::class, 'store'])
+    ->middleware(['auth', 'solo.admin'])
+    ->name('compras.store');
