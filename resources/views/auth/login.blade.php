@@ -1,26 +1,13 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar sesión | LÚMINA</title>
-</head>
-<body>
-    <h1>Bienvenido a LÚMINA</h1>
-    <h2>Iniciar sesión</h2>
-    
-    <form action="{{ route('login.submit') }}" method="POST">
-        @csrf
-        
-        <label for="correo">Correo electrónico:</label>
-        <input type="email" id="correo" name="correo" value="{{ old('correo') }}" required>
-        @error('correo')
-            <p style="color: #C00;">{{ $message }}</p>
-        @enderror
-        <label for="contrasena">Contraseña:</label>
-        <input type="password" id="contrasena" name="contrasena" required>
-        
-        <button type="submit">Ingresar</button>
-    </form>
-</body>
-</html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#17221d"><title>Iniciar sesión | LÚMINA</title>@vite(['resources/css/app.css', 'resources/js/app.js'])</head>
+<body class="auth-body"><main class="auth-shell">
+    <section class="auth-visual" aria-label="Bienvenida a LÚMINA"><a href="{{ url('/') }}" aria-label="Volver al inicio"><x-brand light /></a><div class="auth-visual__content"><p class="eyebrow">Espacio privado</p><h1>Donde cada detalle encuentra su lugar.</h1><p>Gestiona el universo LÚMINA desde un espacio claro, sereno y seguro.</p></div><div class="auth-visual__jewel"><span></span></div><p class="auth-visual__foot">Joyería contemporánea · Ecuador</p></section>
+    <section class="auth-form-wrap"><a class="auth-back" href="{{ url('/') }}"><x-icon name="arrow-left" size="18" />Volver a la tienda</a><div class="auth-form-card"><div class="auth-mobile-brand"><x-brand /></div><p class="eyebrow">Bienvenido de vuelta</p><h2>Inicia sesión</h2><p class="auth-intro">Ingresa tus credenciales para acceder al panel.</p>
+        @if ($errors->any())<div class="alert alert--error" role="alert"><span class="alert__icon"><x-icon name="alert" /></span><div><strong>Revisa tus datos</strong><p>{{ $errors->first() }}</p></div></div>@endif
+        <form action="{{ route('login.submit') }}" method="POST" class="form-stack" novalidate>@csrf
+            <div class="field"><label for="correo">Correo electrónico</label><div class="field__control"><x-icon name="user" size="18" /><input type="email" id="correo" name="correo" value="{{ old('correo') }}" placeholder="nombre@correo.com" autocomplete="email" required></div>@error('correo')<p class="field__error">{{ $message }}</p>@enderror</div>
+            <div class="field"><label for="contrasena">Contraseña</label><div class="field__control"><x-icon name="gem" size="18" /><input type="password" id="contrasena" name="contrasena" placeholder="Tu contraseña" autocomplete="current-password" required data-password><button type="button" class="field__action" aria-label="Mostrar contraseña" data-password-toggle><x-icon name="eye" size="18" /></button></div>@error('contrasena')<p class="field__error">{{ $message }}</p>@enderror</div>
+            <button class="button button--primary button--full" type="submit">Ingresar al panel <x-icon name="arrow-right" size="18" /></button>
+        </form><p class="auth-help"><x-icon name="info" size="17" />¿Necesitas acceso? Solicítalo al administrador de LÚMINA.</p>
+    </div></section>
+</main></body></html>

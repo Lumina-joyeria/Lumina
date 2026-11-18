@@ -1,17 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel | LÚMINA</title>
-</head>
-<body>
-    <h1>Bienvenido a LÚMINA, {{ $nombre }}</h1>
-    
-    <form action="{{ route('logout') }}" method="POST">
-        @csrf
-        
-        <button type="submit">Cerrar sesión</button>
-    </form>
-</body>
-</html>
+@extends('layouts.workspace')
+@section('title', 'Resumen')
+@section('eyebrow', (int) auth()->user()->id_rol === 1 ? 'Administración' : 'Operaciones')
+@section('page_title', 'Hola, ' . $nombre)
+@section('content')
+<div class="welcome-strip"><div><p class="eyebrow">{{ now()->locale('es')->translatedFormat('l, d \d\e F') }}</p><h2>{{ (int) auth()->user()->id_rol === 1 ? 'Tu tienda, de un vistazo.' : 'Todo preparado para una gran jornada.' }}</h2><p>Consulta los accesos disponibles y continúa donde lo dejaste.</p></div><div class="welcome-strip__spark"><span></span></div></div>
+@if((int) auth()->user()->id_rol === 1)
+<div class="metric-grid"><article class="metric-card"><span class="metric-card__icon"><x-icon name="gem" /></span><div><p>Productos</p><strong>Catálogo</strong><small>Gestión disponible</small></div><a href="{{ route('productos.index') }}" aria-label="Gestionar productos"><x-icon name="arrow-right" /></a></article><article class="metric-card"><span class="metric-card__icon"><x-icon name="tag" /></span><div><p>Categorías</p><strong>Colecciones</strong><small>Gestión disponible</small></div><a href="{{ route('categorias.index') }}" aria-label="Gestionar categorías"><x-icon name="arrow-right" /></a></article><article class="metric-card"><span class="metric-card__icon"><x-icon name="users" /></span><div><p>Clientes</p><strong>Directorio</strong><small>Gestión disponible</small></div><a href="{{ route('clientes.index') }}" aria-label="Gestionar clientes"><x-icon name="arrow-right" /></a></article><article class="metric-card metric-card--muted"><span class="metric-card__icon"><x-icon name="box" /></span><div><p>Inventario</p><strong>Pendiente</strong><small>Esperando backend</small></div></article></div>
+<div class="dashboard-grid"><section class="panel-card"><div class="panel-card__head"><div><p class="eyebrow">Accesos rápidos</p><h2>Gestión de la tienda</h2></div></div><div class="quick-actions"><a href="{{ route('productos.create') }}"><span><x-icon name="plus" /></span><div><strong>Registrar producto</strong><small>Agrega una nueva pieza al catálogo</small></div><x-icon name="arrow-right" /></a><a href="{{ route('categorias.create') }}"><span><x-icon name="tag" /></span><div><strong>Crear categoría</strong><small>Organiza mejor tus colecciones</small></div><x-icon name="arrow-right" /></a><a href="{{ route('clientes.create') }}"><span><x-icon name="users" /></span><div><strong>Registrar cliente</strong><small>Agrega un contacto al directorio</small></div><x-icon name="arrow-right" /></a></div></section><section class="panel-card panel-card--dark"><p class="eyebrow">Estado del sistema</p><h2>Frontend conectado</h2><p>Productos, categorías y clientes están conectados. Carrito e inventario mostrarán datos cuando se habiliten sus módulos.</p><span class="status-pill"><i></i>Módulos disponibles activos</span></section></div>
+@else
+<div class="dashboard-grid dashboard-grid--employee"><section class="panel-card"><div class="panel-card__head"><div><p class="eyebrow">Panel del empleado</p><h2>Operaciones del día</h2></div></div><x-empty-state icon="box" title="Módulos en preparación" description="Pedidos e inventario aparecerán aquí cuando el backend habilite sus rutas y datos." /></section><section class="panel-card panel-card--dark"><p class="eyebrow">Tu acceso</p><h2>Perfil de equipo</h2><p>Tu sesión está activa. Las opciones visibles se adaptarán a las funciones autorizadas por el backend.</p><span class="status-pill"><i></i>Sesión protegida</span></section></div>
+@endif
+@endsection
