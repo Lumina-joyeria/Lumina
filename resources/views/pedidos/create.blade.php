@@ -1,117 +1,89 @@
-<h1>Registrar pedido</h1>
-@if (session('success'))
-    <p style="color: #090;">
-        {{ session('success') }}
-    </p>
-@endif
+@extends('layouts.workspace')
 
-@if ($errors->any())
-    <ul>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-@endif
+@section('title', 'Registrar pedido')
+@section('eyebrow', 'Operaciones / Pedidos')
+@section('page_title', 'Registrar pedido')
 
-<form action="{{ route('pedidos.store') }}" method="POST">
-    @csrf
-    
-    <label for="id_cliente">Cliente:</label>
-    <select name="id_cliente" id="id_cliente" required>
-        <option value="">Seleccione un cliente</option>
-        
-        @foreach ($clientes as $cliente)
-            <option value="{{ $cliente->id }}">
-                {{ $cliente->nombre }}
-            </option>
-        @endforeach
-    </select>
-    
-    <hr>
-    
-    <div id="lista-productos">
-        <div class="fila-producto">
-            
-            
-            <h3>Producto 1</h3>
-            
-            <label for="id_producto">Joya:</label>
-            
-            <select name="items[0][id_producto]" id="id_producto" required>
-                <option value="">Seleccione un producto</option>
-                
-                @foreach ($productos as $producto)
-            <option value="{{ $producto->id }}">
-                {{ $producto->nombre }}
-                - ${{ $producto->precio }}
-                (Stock: {{ $producto->stock }})
-            </option>
-            @endforeach
-        </select>
-        
-        <label for="cantidad">Cantidad</label>
-        
-        <input
-        type="number"
-        name="items[0][cantidad]"
-        id="cantidad"
-        min="1"
-        value="1"
-        required
-        >
-        
-        </div>
-    </div>
-    
-    <button type="button" id="agregar-producto">
-        + Añadir otro producto
-    </button>
-    
-    <hr>
-    
-    <button type="submit">Registrar pedido</button>
-</form>
+@section('content')
+    <a class="back-link" href="{{ route('pedidos.index') }}">
+        <x-icon name="arrow-left" size="18" />
+        Volver a pedidos
+    </a>
 
-<script>
-    const contenedor = document.getElementById('lista-productos');
-    const botonAgregar = document.getElementById('agregar-producto');
-    
-    let indice = 1;
-    
-    botonAgregar.addEventListener('click', function () {
-        
-        const primeraFila = contenedor.querySelector('.fila-producto');
-        const nuevaFila = primeraFila.cloneNode(true);
-        
-        nuevaFila.querySelector('h3').textContent = `Producto ${indice + 1}`;
-        
-        const select = nuevaFila.querySelector('select');
-        select.name = `items[${indice}][id_producto]`;
-        select.id = `id_producto_${indice}`;
-        select.value = '';
-        
-        const cantidad = nuevaFila.querySelector('input');
-        cantidad.name = `items[${indice}][cantidad]`;
-        cantidad.id = `cantidad_${indice}`;
-        cantidad.value = 1;
-        
-        nuevaFila.querySelector('label[for="id_producto"]')
-            .setAttribute('for', select.id);
-        
-        nuevaFila.querySelector('label[for="cantidad"]')
-            .setAttribute('for', cantidad.id);
-        
-        const botonQuitar = document.createElement('button');
-        botonQuitar.type = 'button';
-        botonQuitar.textContent = 'Quitar producto';
-        
-        botonQuitar.addEventListener('click', function () {
-            nuevaFila.remove();
-        });
-        
-        nuevaFila.appendChild(botonQuitar);
-        contenedor.appendChild(nuevaFila);
-        
-        indice++;
-    });
-</script>
+    @if ($clientes->isEmpty() || $productos->isEmpty())
+        <x-empty-state
+            icon="cart"
+            title="Aún no puedes registrar un pedido"
+            :description="$clientes->isEmpty() ? 'Registra un cliente para continuar.' : 'Necesitas al menos un producto con stock disponible.'"
+            :action="$clientes->isEmpty() ? 'Registrar cliente' : null"
+            :href="$clientes->isEmpty() ? route('clientes.create') : null"
+        />
+    @else
+        @php
+            $filas = old('items', [[]]);
+            $filas = is_array($filas) && $filas !== [] ? $filas : [[]];
+            $filas = array_filter($filas, fn ($indice) => is_int($indice) && $indice >= 0, ARRAY_FILTER_USE_KEY) ?: [[]];
+        @endphp
+
+        <form class="editor-card" action="{{ route('pedidos.store') }}" method="POST" data-order-form>
+            @csrf
+            <div class="editor-card__head">
+                <span><x-icon name="cart" /></span>
+                <div>
+                    <h2>Cliente y productos</h2>
+                    <p>El pedido quedará pendiente hasta que lo confirmes.</p>
+                </div>
+            </div>
+
+            @if ($errors->has('items'))
+                <div class="alert alert--error" role="alert">
+                    <span class="alert__icon"><x-icon name="alert" /></span>
+                    <p>{{ $errors->first('items') }}</p>
+                </div>
+            @endif
+
+            <div class="field mb-6">
+                <label for="id-cliente">Cliente</label>
+                <select class="input" name="id_cliente" id="id-cliente" required
+                    @error('id_cliente') aria-invalid="true" aria-describedby="cliente-error" @enderror
+                >
+                    <option value="">Selecciona un cliente</option>
+                    @foreach ($clientes as $cliente)
+                        <option value="{{ $cliente->id }}" @selected(old('id_cliente') == $cliente->id)>
+                            {{ $cliente->nombre }} · {{ $cliente->correo }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('id_cliente')
+                    <p class="field__error" id="cliente-error">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="grid gap-3" data-order-items>
+                @foreach ($filas as $indice => $fila)
+                    @include('pedidos._item', ['indice' => $indice, 'fila' => is_array($fila) ? $fila : []])
+                @endforeach
+            </div>
+
+            <template data-order-template>
+                @include('pedidos._item', ['indice' => '__INDEX__', 'fila' => []])
+            </template>
+
+            <div class="mt-4 flex flex-wrap items-center justify-between gap-4">
+                <button class="button button--ghost" type="button" data-order-add hidden>
+                    <x-icon name="plus" size="18" /> Agregar producto
+                </button>
+                <p class="m-0 font-semibold">Total estimado: <output data-order-total>$0.00</output></p>
+            </div>
+
+            <div class="form-actions">
+                <a class="button button--ghost" href="{{ route('pedidos.index') }}">Cancelar</a>
+                <button class="button button--primary" type="submit">
+                    <x-icon name="check" size="18" /> Registrar pedido
+                </button>
+            </div>
+        </form>
+
+        <script src="{{ asset('js/pedidos.js') }}" defer></script>
+    @endif
+@endsection
