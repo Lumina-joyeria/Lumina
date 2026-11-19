@@ -33,6 +33,39 @@ document.querySelector('[data-password-toggle]')?.addEventListener('click', (eve
     event.currentTarget.setAttribute('aria-label', reveal ? 'Ocultar contraseña' : 'Mostrar contraseña');
 });
 
+const loginLock = document.querySelector('[data-login-lock]');
+
+if (loginLock) {
+    const title = loginLock.querySelector('[data-login-lock-title]');
+    const message = loginLock.querySelector('[data-login-lock-message]');
+    const count = loginLock.querySelector('[data-login-lock-count]');
+    const unit = loginLock.querySelector('[data-login-lock-unit]');
+    const form = document.querySelector('[data-login-form]');
+    const submit = form.querySelector('[data-login-submit]');
+    const submitLabel = submit.querySelector('[data-login-submit-label]');
+    const expiresAt = Date.now() + Number(loginLock.dataset.loginLockSeconds) * 1000;
+
+    const countdown = window.setInterval(() => {
+        const remaining = Math.ceil((expiresAt - Date.now()) / 1000);
+
+        if (remaining > 0) {
+            count.textContent = String(remaining);
+            unit.textContent = remaining === 1 ? 'segundo' : 'segundos';
+            submitLabel.textContent = `Espera ${remaining} s`;
+            return;
+        }
+
+        window.clearInterval(countdown);
+        title.textContent = 'Ya puedes volver a intentar.';
+        message.removeAttribute('role');
+        message.removeAttribute('aria-live');
+        message.textContent = 'El bloqueo temporal terminó.';
+        loginLock.classList.replace('alert--error', 'alert--success');
+        submit.disabled = false;
+        submitLabel.textContent = 'Ingresar al panel';
+    }, 1000);
+}
+
 document.querySelectorAll('[data-dismiss]').forEach((button) => {
     button.addEventListener('click', () => button.closest('[data-dismissible]')?.remove());
 });
