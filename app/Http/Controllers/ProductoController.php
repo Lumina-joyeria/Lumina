@@ -62,7 +62,7 @@ class ProductoController extends Controller
     {
         $datos = $request->validate([
             'nombre' => 'required|string|max:100',
-            'description' => 'nullable|string',
+            'description' => 'required|string',
             'precio' => 'required|numeric|min:0|max:99999999.99',
             'id_categoria' => 'required|integer|exists:categorias,id',
             'imagen' => 'nullable|image|mimetypes:image/jpeg,image/png,image/webp|max:5120',
