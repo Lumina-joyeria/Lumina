@@ -9,6 +9,7 @@ use App\Http\Controllers\PedidoController;
 use App\Models\Pedido;
 use App\Http\Controllers\MovimientoFinancieroController;
 use App\Http\Controllers\CompraInventarioController;
+use App\Http\Controllers\CatalogoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -142,3 +143,10 @@ Route::get('/compras/crear', [CompraInventarioController::class, 'create'])
 Route::post('/compras', [CompraInventarioController::class, 'store'])
     ->middleware(['auth', 'solo.admin'])
     ->name('compras.store');
+
+// Catálogo público de LÚMINA
+Route::get('/catalogo', [CatalogoController::class, 'index'])
+    ->name('catalogo.index');
+
+Route::get('/catalogo/{producto}', [CatalogoController::class, 'show'])
+    ->name('catalogo.show');
