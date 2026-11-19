@@ -142,3 +142,5 @@ Route::get('/compras/crear', [CompraInventarioController::class, 'create'])
 Route::post('/compras', [CompraInventarioController::class, 'store'])
     ->middleware(['auth', 'solo.admin'])
     ->name('compras.store');
+
+require __DIR__.'/tienda.php';

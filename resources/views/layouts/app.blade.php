@@ -20,6 +20,10 @@
                 <a href="{{ url('/') }}#servicios">Servicios</a>
             </nav>
             <div class="site-header__actions">
+                <a class="header-action" href="{{ route('carrito.index') }}" aria-label="Ver carrito">
+                    <x-icon name="cart" />
+                    <span>Carrito</span>
+                </a>
                 @auth
                     <a class="header-action" href="{{ url('/panel') }}" aria-label="Ir al panel"><x-icon name="user" /><span>Panel</span></a>
                 @else
