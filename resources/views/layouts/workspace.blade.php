@@ -10,24 +10,45 @@
 <body class="workspace-body">
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
     <div class="workspace">
-        <aside class="sidebar" data-sidebar>
+        <aside class="sidebar" id="menu-panel" data-sidebar>
             <div class="sidebar__head">
                 <a href="{{ url('/panel') }}" aria-label="LÚMINA, panel"><x-brand compact light /></a>
                 <button class="sidebar__close" type="button" aria-label="Cerrar menú" data-sidebar-close><x-icon name="close" /></button>
             </div>
             <nav class="sidebar__nav" aria-label="Navegación del panel">
                 <p class="sidebar__label">Espacio de trabajo</p>
-                <a class="{{ request()->is('panel') ? 'is-active' : '' }}" href="{{ url('/panel') }}"><x-icon name="grid" />Resumen</a>
-                @if((int) auth()->user()->id_rol === 1)
+                <a
+                    @class(['is-active' => request()->is('panel')])
+                    href="{{ url('/panel') }}"
+                    @if (request()->is('panel')) aria-current="page" @endif
+                >
+                    <x-icon name="grid" />
+                    Resumen
+                </a>
+
+                @if ((int) auth()->user()->id_rol === 1)
+                    @php
+                        $enlaces = [
+                            ['titulo' => 'Productos', 'ruta' => 'productos.index', 'grupo' => 'productos.*', 'icono' => 'gem'],
+                            ['titulo' => 'Categorías', 'ruta' => 'categorias.index', 'grupo' => 'categorias.*', 'icono' => 'tag'],
+                            ['titulo' => 'Clientes', 'ruta' => 'clientes.index', 'grupo' => 'clientes.*', 'icono' => 'users'],
+                            ['titulo' => 'Pedidos', 'ruta' => 'pedidos.index', 'grupo' => 'pedidos.*', 'icono' => 'cart'],
+                            ['titulo' => 'Compras de inventario', 'ruta' => 'compras.create', 'grupo' => 'compras.*', 'icono' => 'box'],
+                            ['titulo' => 'Finanzas', 'ruta' => 'finanzas.index', 'grupo' => 'finanzas.*', 'icono' => 'finance'],
+                        ];
+                    @endphp
+
                     <p class="sidebar__label">Administración</p>
-                    <a class="{{ request()->routeIs('productos.*') ? 'is-active' : '' }}" href="{{ route('productos.index') }}"><x-icon name="gem" />Productos</a>
-                    <a class="{{ request()->routeIs('categorias.*') ? 'is-active' : '' }}" href="{{ route('categorias.index') }}"><x-icon name="tag" />Categorías</a>
-                    <a class="{{ request()->routeIs('clientes.*') ? 'is-active' : '' }}" href="{{ route('clientes.index') }}"><x-icon name="users" />Clientes</a>
-                    <span class="sidebar__pending" title="Pendiente de integración"><x-icon name="box" />Inventario <small>Próximamente</small></span>
-                @else
-                    <p class="sidebar__label">Operaciones</p>
-                    <span class="sidebar__pending"><x-icon name="cart" />Pedidos <small>Próximamente</small></span>
-                    <span class="sidebar__pending"><x-icon name="box" />Inventario <small>Próximamente</small></span>
+                    @foreach ($enlaces as $enlace)
+                        <a
+                            @class(['is-active' => request()->routeIs($enlace['grupo'])])
+                            href="{{ route($enlace['ruta']) }}"
+                            @if (request()->routeIs($enlace['ruta'])) aria-current="page" @endif
+                        >
+                            <x-icon :name="$enlace['icono']" />
+                            {{ $enlace['titulo'] }}
+                        </a>
+                    @endforeach
                 @endif
             </nav>
             <div class="sidebar__foot">
@@ -37,7 +58,7 @@
         </aside>
         <div class="workspace__main">
             <header class="workspace-header">
-                <button class="workspace-header__menu" type="button" aria-label="Abrir menú" data-sidebar-open><x-icon name="menu" /></button>
+                <button class="workspace-header__menu" type="button" aria-label="Abrir menú" aria-controls="menu-panel" data-sidebar-open><x-icon name="menu" /></button>
                 <div><p>@yield('eyebrow', 'LÚMINA')</p><h1>@yield('page_title', 'Panel')</h1></div>
                 <a class="workspace-header__store" href="{{ url('/') }}"><x-icon name="home" />Ver tienda</a>
             </header>
