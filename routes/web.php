@@ -150,3 +150,5 @@ Route::get('/catalogo', [CatalogoController::class, 'index'])
 
 Route::get('/catalogo/{producto}', [CatalogoController::class, 'show'])
     ->name('catalogo.show');
+
+require __DIR__.'/tienda.php';

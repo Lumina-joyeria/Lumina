@@ -31,6 +31,16 @@ class PedidoController extends Controller
             'items' => 'required|array|min:1',
             'items.*.id_producto' => 'required|integer|distinct|exists:productos,id',
             'items.*.cantidad' => 'required|integer|min:1',
+        ], [
+            'id_cliente.*' => 'Selecciona un cliente válido.',
+            'items.required' => 'Agrega al menos un producto.',
+            'items.array' => 'Revisa la lista de productos.',
+            'items.min' => 'Agrega al menos un producto.',
+            'items.*.id_producto.required' => 'Selecciona un producto.',
+            'items.*.id_producto.integer' => 'Selecciona un producto válido.',
+            'items.*.id_producto.distinct' => 'Este producto ya está en el pedido. Ajusta su cantidad en una sola fila.',
+            'items.*.id_producto.exists' => 'El producto seleccionado ya no está disponible.',
+            'items.*.cantidad.*' => 'Ingresa una cantidad entera mayor que cero.',
         ]);
         
         $pedido = DB::transaction(function () use ($datos) {

@@ -20,6 +20,10 @@
                 <a href="{{ url('/') }}#servicios">Servicios</a>
             </nav>
             <div class="site-header__actions">
+                <a class="header-action" href="{{ route('carrito.index') }}" aria-label="Ver carrito">
+                    <x-icon name="cart" />
+                    <span>Carrito</span>
+                </a>
                 @auth
                     <a class="header-action" href="{{ url('/panel') }}" aria-label="Ir al panel"><x-icon name="user" /><span>Panel</span></a>
                 @else
@@ -36,7 +40,7 @@
         <div class="container site-footer__grid">
             <div><x-brand light /><p>Joyas sutiles, hechas para guardar historias.</p></div>
             <div><h2>Explora</h2><a href="{{ url('/') }}#colecciones">Colecciones</a><a href="{{ url('/') }}#historia">Nuestra esencia</a><a href="{{ route('login') }}">Acceso al equipo</a></div>
-            <div><h2>Atención</h2><p>Lunes a sábado<br>09:00 – 18:00</p><p>Quito, Ecuador</p></div>
+            <div><h2>Atención</h2><p>Lunes a sábado<br>09:00 – 18:00</p><p>Guayaquil, Ecuador</p></div>
             <div><h2>Confianza</h2><p>Pagos protegidos</p><p>Empaque cuidadoso</p><p>Asesoría personalizada</p></div>
         </div>
         <div class="container site-footer__bottom"><span>© {{ date('Y') }} LÚMINA</span><span>Diseñado para brillar contigo</span></div>
