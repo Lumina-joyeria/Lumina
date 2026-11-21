@@ -10,6 +10,7 @@ use App\Models\Pedido;
 use App\Http\Controllers\MovimientoFinancieroController;
 use App\Http\Controllers\CompraInventarioController;
 use App\Http\Controllers\CatalogoController;
+use App\Http\Controllers\AsistenteController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -152,3 +153,17 @@ Route::get('/catalogo/{producto}', [CatalogoController::class, 'show'])
     ->name('catalogo.show');
 
 require __DIR__.'/tienda.php';
+
+/*
+|--------------------------------------------------------------------------
+| Asistente Inteligente LÚMINA
+|--------------------------------------------------------------------------
+| Permite a visitantes y usuarios consultar al asistente Gemini.
+*/
+
+Route::post('/asistente/preguntar', [
+    AsistenteController::class,
+    'responder'
+])
+->middleware('throttle:10,1')
+->name('asistente.preguntar');
